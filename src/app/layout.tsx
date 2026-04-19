@@ -3,10 +3,10 @@ import { getLocalBusinessSchema, getServicesSchema } from '@/lib/schema';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://leandromartins.pt'),
+  metadataBase: new URL('https://equipetec.pt'),
   title: {
-    default: 'Leandro Martins — Servicos Informaticos | Suporte TI para PMEs',
-    template: '%s | Leandro Martins',
+    default: 'Servicos Informaticos | Suporte TI para PMEs',
+    template: '%s | Equipetec',
   },
   description:
     'Suporte tecnico especializado para PMEs em Portugal. Reparacao, Microsoft 365, redes, backup e seguranca. Atendimento remoto e presencial.',
@@ -25,15 +25,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'pt_PT',
-    siteName: 'Leandro Martins — Servicos Informaticos',
-    title: 'Leandro Martins — O seu parceiro tecnologico de confianca',
+    siteName: 'Servicos Informaticos',
+    title: 'Equipetec — O seu parceiro tecnologico de confianca',
     description:
       'Suporte tecnico especializado para PMEs em Portugal. Reparacao, Microsoft 365, redes, backup e seguranca.',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Leandro Martins — Servicos Informaticos',
+    title: 'Servicos Informaticos',
     description: 'Suporte tecnico especializado para PMEs em Portugal.',
     images: ['/og-image.jpg'],
   },
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://leandromartins.pt',
+    canonical: 'https://equipetec.pt',
   },
 };
 
