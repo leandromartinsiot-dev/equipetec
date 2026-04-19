@@ -43,7 +43,7 @@ export default function Contact() {
 
             <div className="space-y-6">
               <a
-                href="mailto:leandromartins.iot@gmail.com"
+                href="mailto:suporte@equipetec.pt"
                 className="flex items-center gap-4 group"
               >
                 <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center group-hover:bg-brand-accent transition-colors">
