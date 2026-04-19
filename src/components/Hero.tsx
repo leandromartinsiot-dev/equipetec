@@ -56,7 +56,7 @@ export default function Hero() {
         >
           <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-8 border-white bg-slate-100">
             <Image
-              src="https://69d0f7f51362132535da4311.imgix.net/GGeneraImage.png?auto=format&fit=fill&w=640"
+              src="https://69d0f7f51362132535da4311.imgix.net/foto-home.png?auto=format&fit=fill&w=640"
               alt="Paisagem de confianca e seguranca"
               width={800}
               height={1000}
