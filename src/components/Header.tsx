@@ -18,7 +18,7 @@ export default function Header() {
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-slate-900 leading-tight">
-              Leandro Martins
+              EQUIPETEC
             </span>
             <span className="text-xs text-slate-500 font-mono uppercase tracking-wider">
               Servicos Informaticos

@@ -13,7 +13,7 @@ export default function Contact() {
 
   const handleSendMessage = () => {
     const body = `Nome: ${form.name}%0D%0AEmpresa: ${form.company}%0D%0AAssunto: ${form.subject}%0D%0AMensagem: ${form.message}`;
-    window.location.href = `mailto:leandromartins.iot@gmail.com?subject=${encodeURIComponent(form.subject || 'Contacto Web')}&body=${body}`;
+    window.location.href = `mailto:suporte@equipetec.pt?subject=${encodeURIComponent(form.subject || 'Contacto Web')}&body=${body}`;
   };
 
   return (
@@ -53,7 +53,7 @@ export default function Contact() {
                   <p className="text-sm text-slate-400 font-medium">
                     Email Profissional
                   </p>
-                  <p className="text-xl font-bold">leandromartins.iot@gmail.com</p>
+                  <p className="text-xl font-bold">suporte@equipetec.pt</p>
                 </div>
               </a>
               <a

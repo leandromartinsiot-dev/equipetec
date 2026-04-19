@@ -6,7 +6,7 @@ export default function Footer() {
           <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center text-white font-bold text-sm">
             LM
           </div>
-          <span className="font-bold text-white">Leandro Martins</span>
+          <span className="font-bold text-white">EQUIPETEC</span>
         </div>
 
         <div className="flex gap-8 text-sm font-medium">
