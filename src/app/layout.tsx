@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'Portugal',
     'suporte tecnico Porto',
   ],
-  authors: [{ name: 'Leandro Martins' }],
+  authors: [{ name: 'Equipetec' }],
   openGraph: {
     type: 'website',
     locale: 'pt_PT',

@@ -13,9 +13,7 @@ export default function Header() {
     <nav className="fixed top-0 w-full z-50 glass-card border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <a href="#" className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-brand-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">
-            LM
-          </div>
+          <img src="/logo.png" alt="Equipetec" className="w-10 h-10 rounded-lg object-contain" />
           <div className="flex flex-col">
             <span className="font-bold text-slate-900 leading-tight">
               EQUIPETEC
