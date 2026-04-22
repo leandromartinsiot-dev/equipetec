@@ -16,11 +16,11 @@ export default function LiquidWarning() {
       </div>
       <div className="text-center md:text-left">
         <h4 className="text-xl font-bold text-amber-900 mb-2">
-          Emergencia com Liquidos?
+          Emergência com Liquidos?
         </h4>
         <p className="text-amber-800 leading-relaxed">
-          Se o seu portatil teve contacto com agua ou outro liquido,{' '}
-          <span className="font-bold underline">nao tente liga-lo</span>. Entre
+          Se o seu portátil teve contacto com água ou outro líquido,{' '}
+          <span className="font-bold underline">não tente ligá-lo</span>. Entre
           em contacto imediato para tentarmos recuperar o seu equipamento e
           dados.
         </p>

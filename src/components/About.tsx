@@ -44,7 +44,7 @@ export default function About() {
           </div>
           <div className="order-1 lg:order-2">
             <h2 className="text-sm font-bold text-brand-accent uppercase tracking-[0.2em] mb-4">
-              Porque Escolher-nos?
+              Porquê Escolher-nos?
             </h2>
             <h3 className="text-4xl font-bold text-slate-900 mb-8 leading-tight">
               Atendimento Personalizado e Direto com o Especialista
@@ -56,11 +56,11 @@ export default function About() {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold text-slate-900 mb-2">
-                    Comunicacao Direta
+                    Comunicação Direta
                   </h4>
                   <p className="text-slate-600 leading-relaxed">
-                    Fale diretamente com o responsavel tecnico via WhatsApp,
-                    Telefone ou Email. Sem intermediarios ou esperas longas.
+                    Fale diretamente com o responsável técnico via WhatsApp,
+                    Telefone ou Email. Sem intermediários ou esperas longas.
                   </p>
                 </div>
               </div>
@@ -73,7 +73,7 @@ export default function About() {
                     Flexibilidade Total
                   </h4>
                   <p className="text-slate-600 leading-relaxed">
-                    Suporte remoto rapido para o dia-a-dia e intervencoes
+                    Suporte remoto rápido para o dia-a-dia e intervenções
                     presenciais para infraestrutura e problemas complexos.
                   </p>
                 </div>
@@ -84,11 +84,11 @@ export default function About() {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold text-slate-900 mb-2">
-                    Seguranca Garantida
+                    Segurança Garantida
                   </h4>
                   <p className="text-slate-600 leading-relaxed">
-                    Implementamos as melhores praticas de seguranca e backup,
-                    garantindo que os seus dados estao sempre protegidos.
+                    Implementamos as melhores práticas de segurança e backup,
+                    garantindo que os seus dados estão sempre protegidos.
                   </p>
                 </div>
               </div>

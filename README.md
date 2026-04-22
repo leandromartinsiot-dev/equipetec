@@ -116,7 +116,7 @@ src/
 │   ├── Header.tsx          # Barra de navegacao
 │   ├── Hero.tsx            # Seccao principal (hero)
 │   ├── Services.tsx        # Grid de 6 servicos
-│   ├── LiquidWarning.tsx   # Alerta de emergencia com liquidos
+│   ├── LiquidWarning.tsx   # Alerta de emergência com líquidos
 │   ├── About.tsx           # Seccao "Porque Escolher-nos"
 │   ├── Testimonials.tsx    # Testemunhos de clientes
 │   ├── Contact.tsx         # Formulario de contacto
