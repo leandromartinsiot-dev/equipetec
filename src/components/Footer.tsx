@@ -8,8 +8,8 @@ export default function Footer() {
         </div>
 
         <div className="flex gap-8 text-sm font-medium">
-          <a href="#serviços" className="hover:text-white transition-colors">
-            Servicos
+          <a href="#servicos" className="hover:text-white transition-colors">
+            Serviços
           </a>
           <a href="#sobre" className="hover:text-white transition-colors">
             Sobre
