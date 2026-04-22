@@ -27,7 +27,7 @@ export default function About() {
               </div>
               <div className="space-y-4 pt-8">
                 <div className="bg-brand-primary p-6 rounded-2xl text-white text-center flex flex-col justify-center min-h-[120px]">
-                  <p className="text-xl font-bold mb-1">Monitorizacao</p>
+                  <p className="text-xl font-bold mb-1">Monitorização</p>
                   <p className="text-xs font-medium uppercase tracking-wider opacity-80">
                     Sistemas & Redes
                   </p>
