@@ -8,10 +8,10 @@ export const services = [
     details: ["Suporte Remoto", "Intervencao In-loco", "Substituicao de Ecras", "Software Troubleshooting"]
   },
   {
-    title: "Reparação & Emergencia",
-    description: "Recuperacao de equipamentos danificados e intervenções críticas de hardware.",
+    title: "Reparação & Emergncia",
+    description: "Recuperação de equipamentos danificados e intervenções críticas de hardware.",
     icon: Smartphone,
-    details: ["Substituição de Ecras", "Danos por Liquidos", "Limpeza e Manutenção", "Upgrade de Hardware"]
+    details: ["Substituição de Ecras", "Danos por Líquidos", "Limpeza e Manutenção", "Upgrade de Hardware"]
   },
   {
     title: "Microsoft 365",
