@@ -8,7 +8,7 @@ export const services = [
     details: ["Suporte Remoto", "Intervencao In-loco", "Substituicao de Ecras", "Software Troubleshooting"]
   },
   {
-    title: "Reparação & Emergncia",
+    title: "Reparação & Emergência",
     description: "Recuperação de equipamentos danificados e intervenções críticas de hardware.",
     icon: Smartphone,
     details: ["Substituição de Ecras", "Danos por Líquidos", "Limpeza e Manutenção", "Upgrade de Hardware"]
