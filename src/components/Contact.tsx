@@ -36,9 +36,9 @@ export default function Contact() {
               Vamos falar sobre <br />o seu projeto?
             </h3>
             <p className="text-xl text-slate-400 mb-12 leading-relaxed">
-              Estamos prontos para ser o seu braco direito tecnologico. Entre em
-              contacto para um orcamento gratuito ou para esclarecer qualquer
-              duvida.
+              Estamos prontos para ser o seu braco direito tecnológico. Entre em
+              contacto para um orçamento gratuito ou para esclarecer qualquer
+              dúvida.
             </p>
 
             <div className="space-y-6">

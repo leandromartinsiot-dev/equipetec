@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { MessageSquare, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-const navItems = ['Servicos', 'Sobre', 'Testemunhos', 'Contacto'];
+const navItems = ['Serviços', 'Sobre', 'Testemunhos', 'Contacto'];
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,7 +19,7 @@ export default function Header() {
               EQUIPETEC
             </span>
             <span className="text-xs text-slate-500 font-mono uppercase tracking-wider">
-              Servicos Informaticos
+              Serviços Informaticos
             </span>
           </div>
         </a>
