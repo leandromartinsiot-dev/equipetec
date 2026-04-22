@@ -19,23 +19,23 @@ export default function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            Disponivel para Suporte Remoto e Presencial
+            Disponível para Suporte Remoto e Presencial
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-slate-900 leading-[1.1] mb-6 tracking-tight">
             O seu parceiro <br />
-            <span className="text-brand-accent">tecnologico</span> de confianca
+            <span className="text-brand-accent">tecnológico</span> de confiança
           </h1>
           <p className="text-xl text-slate-600 mb-10 max-w-xl leading-relaxed">
-            Suporte tecnico especializado para PMEs em Portugal. Administracao
-            de redes, Microsoft 365 e solucoes de backup para garantir a
-            continuidade do seu negocio.
+            Suporte técnico especializado para PMEs em Portugal. Administração
+            de redes, Microsoft 365 e soluções de backup para garantir a
+            continuidade do seu negócio.
           </p>
           <div className="flex flex-wrap gap-4">
             <a
-              href="#servicos"
+              href="#serviços"
               className="bg-brand-primary text-white px-8 py-4 rounded-2xl font-bold hover:bg-slate-800 transition-all flex items-center gap-2 shadow-lg shadow-slate-200"
             >
-              Ver Servicos
+              Ver Serviços
               <ArrowRight size={20} />
             </a>
             <a
