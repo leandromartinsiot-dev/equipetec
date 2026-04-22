@@ -13,7 +13,7 @@ export default function Services() {
             Especializacoes
           </h2>
           <h3 className="text-4xl md:text-5xl font-bold text-slate-900">
-            Solucoes Completas de TI
+            Soluções Completas de TI
           </h3>
         </div>
 
