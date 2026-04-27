@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EquipeTec — Portal Técnico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0ede8;
+    --border: #e2dfd8;
+    --border2: #ccc9c0;
+    --text: #1a1916;
+    --text2: #6b6860;
+    --text3: #9b9890;
+    --accent: #c84b1e;
+    --accent-dark: #a83a12;
+    --accent-bg: #fdf0eb;
+    --accent-border: #f0c4b0;
+    --blue: #1a5fa8;
+    --blue-bg: #eaf1fb;
+    --blue-border: #b5d0f0;
+    --green: #2e7d32;
+    --green-bg: #eaf5eb;
+    --green-border: #b0ddb3;
+    --amber: #8a5e00;
+    --amber-bg: #fdf6e3;
+    --amber-border: #f5dfa0;
+    --red: #b71c1c;
+    --red-bg: #fdeaea;
+    --red-border: #f5b0b0;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --font: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    min-height: 100vh; display: none;
+    align-items: center; justify-content: center; background: var(--bg);
+  }
+  #login-screen.active { display: flex; }
+  .login-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 2.5rem 2rem;
+    width: 100%; max-width: 380px; box-shadow: var(--shadow);
+  }
+  .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
+  .login-logo .logo-mark {
+    width: 38px; height: 38px; background: var(--accent); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600; font-size: 14px;
+  }
+  .login-logo .logo-text { font-weight: 600; font-size: 18px; }
+  .login-logo .logo-text span { color: var(--accent); }
+  .login-role-tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+  .role-tab {
+    flex: 1; text-align: center; padding: 8px; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); cursor: pointer; font-size: 13px;
+    color: var(--text2); transition: all 0.15s; background: var(--surface2);
+  }
+  .role-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .login-subtitle { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; }
+
+  /* ── FIELDS ── */
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text2); margin-bottom: 6px; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border2);
+    border-radius: var(--radius-sm); font-family: var(--font); font-size: 14px;
+    color: var(--text); background: var(--surface); outline: none; transition: border-color 0.15s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg);
+  }
+  .field textarea { resize: vertical; min-height: 90px; line-height: 1.55; }
+  .field select { cursor: pointer; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 18px; border-radius: var(--radius-sm); font-family: var(--font);
+    font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+    border: none; text-decoration: none;
+  }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover:not(:disabled) { background: var(--accent-dark); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border2); }
+  .btn-outline:hover:not(:disabled) { background: var(--surface2); }
+  .btn-sm { padding: 6px 12px; font-size: 13px; }
+  .btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .btn-danger:hover:not(:disabled) { background: #f5c0c0; }
+  .btn-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+  .btn-blue:hover:not(:disabled) { background: #c5daf5; }
+  .btn-full { width: 100%; }
+
+  /* ── MESSAGES ── */
+  .error-msg { color: var(--red); font-size: 13px; margin-top: 8px; padding: 8px 10px; background: var(--red-bg); border-radius: var(--radius-sm); display: none; }
+  .error-msg.show { display: block; }
+  .alert { padding: 12px 14px; border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 16px; }
+  .alert-info { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+  .alert-warn { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .alert-success { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .alert-error { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+
+  /* ── LOADING ── */
+  .spinner {
+    width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block;
+  }
+  .spinner-dark { border-color: rgba(0,0,0,0.1); border-top-color: var(--accent); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-overlay {
+    position: fixed; inset: 0; background: rgba(245,244,240,0.8);
+    display: none; align-items: center; justify-content: center; z-index: 2000;
+  }
+  .loading-overlay.show { display: flex; }
+  .loading-box {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px 32px; text-align: center; box-shadow: var(--shadow);
+  }
+  .loading-box p { margin-top: 12px; font-size: 13px; color: var(--text2); }
+
+  /* ── MAIN LAYOUT ── */
+  #main-screen { min-height: 100vh; display: none; flex-direction: column; }
+  #main-screen.active { display: flex; }
+  .topbar {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 16px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .topbar-logo { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 16px; }
+  .topbar-logo .lm {
+    width: 28px; height: 28px; background: var(--accent); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;
+  }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .topbar-user { font-size: 13px; color: var(--text2); }
+  .topbar-user strong { color: var(--text); }
+  .badge-role { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
+  .badge-admin { background: var(--accent-bg); color: var(--accent); }
+  .badge-client { background: var(--blue-bg); color: var(--blue); }
+
+  .main-body { display: flex; flex: 1; }
+  .sidebar {
+    width: 220px; background: var(--surface); border-right: 1px solid var(--border);
+    padding: 16px 12px; display: flex; flex-direction: column; gap: 2px;
+    position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto;
+  }
+  .sidebar-section {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.6px; color: var(--text3); padding: 10px 8px 4px; margin-top: 4px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+    border-radius: var(--radius-sm); cursor: pointer; color: var(--text2);
+    font-size: 14px; transition: all 0.12s;
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: var(--accent-bg); color: var(--accent); font-weight: 500; }
+  .nav-icon { width: 20px; text-align: center; font-size: 14px; }
+
+  .content { flex: 1; padding: 28px 32px; overflow-y: auto; max-height: calc(100vh - 56px); }
+  .page { display: none; }
+  .page.active { display: block; }
+  .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; gap: 12px; }
+  .page-title { font-size: 20px; font-weight: 600; }
+  .page-subtitle { font-size: 13px; color: var(--text2); margin-top: 3px; }
+
+  /* ── CARDS & STATS ── */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+  .card-title { font-size: 13px; font-weight: 600; margin-bottom: 16px; color: var(--text); text-transform: uppercase; letter-spacing: 0.4px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+  .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text3); margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 600; color: var(--text); line-height: 1; font-family: var(--mono); }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.blue { color: var(--blue); }
+  .stat-value.green { color: var(--green); }
+  .stat-value.red { color: var(--red); }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 9px 14px; background: var(--surface2); color: var(--text2); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #fafaf8; }
+  .td-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .tag { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+  .tag-green { background: var(--green-bg); color: var(--green); }
+  .tag-amber { background: var(--amber-bg); color: var(--amber); }
+  .tag-red { background: var(--red-bg); color: var(--red); }
+  .tag-blue { background: var(--blue-bg); color: var(--blue); }
+  .tag-accent { background: var(--accent-bg); color: var(--accent); }
+
+  /* ── HOURS BAR ── */
+  .hours-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin-top: 5px; }
+  .hours-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+  .hours-fill.ok { background: var(--green); }
+  .hours-fill.warn { background: #e89c20; }
+  .hours-fill.critical { background: var(--red); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+    display: none; align-items: center; justify-content: center; z-index: 500; padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border-radius: 14px; padding: 24px;
+    width: 100%; max-width: 580px; max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+  }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .modal-title { font-size: 17px; font-weight: 600; }
+  .modal-close { cursor: pointer; color: var(--text3); font-size: 20px; line-height: 1; padding: 4px 6px; border-radius: 4px; }
+  .modal-close:hover { background: var(--surface2); color: var(--text); }
+  .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ── HOURS PREVIEW ── */
+  .hours-preview-box {
+    background: var(--surface2); border-radius: var(--radius-sm); padding: 12px 14px;
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+  }
+  .preview-num { font-family: var(--mono); font-size: 22px; font-weight: 500; }
+  .preview-num.low { color: var(--red); }
+  .preview-num.mid { color: var(--amber); }
+  .preview-num.ok { color: var(--green); }
+
+  /* ── CLIENT AVATAR ── */
+  .client-row { display: flex; align-items: center; gap: 10px; }
+  .client-avatar {
+    width: 34px; height: 34px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; color: white;
+    font-weight: 600; font-size: 12px; flex-shrink: 0;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state { text-align: center; padding: 48px 24px; color: var(--text2); }
+  .empty-icon { font-size: 36px; margin-bottom: 12px; }
+  .empty-title { font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 6px; }
+  .empty-sub { font-size: 13px; }
+
+  /* ── FILTERS ── */
+  .filters-row { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+  .search-wrap { position: relative; flex: 1; min-width: 200px; }
+  .search-wrap input { padding-left: 34px; }
+  .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text3); pointer-events: none; }
+  .filter-select {
+    padding: 9px 12px; border: 1px solid var(--border2); border-radius: var(--radius-sm);
+    font-family: var(--font); font-size: 13px; color: var(--text); background: var(--surface); cursor: pointer;
+  }
+
+  /* ── DETAIL GRID ── */
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .detail-item { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px 14px; }
+  .detail-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text3); margin-bottom: 4px; }
+  .detail-value { font-size: 14px; font-weight: 500; color: var(--text); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .content { padding: 16px; }
+    .form-row { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING GLOBAL -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-box">
+    <div class="spinner spinner-dark" style="width:28px;height:28px;border-width:3px"></div>
+    <p id="loading-msg">A carregar...</p>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="login-screen" class="active">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="logo-mark">ET</div>
+      <div class="logo-text">Equipe<span>Tec</span></div>
+    </div>
+    <div class="login-role-tabs">
+      <div class="role-tab active" onclick="setLoginRole('admin')">Administração</div>
+      <div class="role-tab" onclick="setLoginRole('client')">Cliente</div>
+    </div>
+    <p class="login-subtitle" id="login-subtitle">Acesso ao painel técnico</p>
+    <div class="field">
+      <label>Utilizador</label>
+      <input type="text" id="login-user" placeholder="utilizador" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Palavra-passe</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+    <div class="error-msg" id="login-error">Credenciais inválidas. Tente novamente.</div>
+    <button class="btn btn-primary btn-full" style="margin-top:14px" id="login-btn" onclick="doLogin()">
+      Entrar
+    </button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main-screen">
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="lm">ET</div>
+      Equipe<span style="color:var(--accent)">Tec</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-user">Bem-vindo, <strong id="topbar-name"></strong></span>
+      <span class="badge-role" id="topbar-role"></span>
+      <button class="btn btn-outline btn-sm" onclick="doLogout()">Sair</button>
+    </div>
+  </div>
+
+  <div class="main-body">
+    <div class="sidebar">
+      <div class="sidebar-section">Principal</div>
+      <div class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard')">
+        <span class="nav-icon">◉</span> Dashboard
+      </div>
+      <div class="nav-item" id="nav-intervencoes" onclick="showPage('intervencoes')">
+        <span class="nav-icon">🔧</span> Intervenções
+      </div>
+      <div class="admin-only sidebar-section">Gestão</div>
+      <div class="admin-only nav-item" id="nav-clientes" onclick="showPage('clientes')">
+        <span class="nav-icon">🏢</span> Clientes
+      </div>
+      <div class="admin-only nav-item" id="nav-utilizadores" onclick="showPage('utilizadores')">
+        <span class="nav-icon">👤</span> Utilizadores
+      </div>
+      <div style="flex:1"></div>
+      <div class="nav-item" onclick="doLogout()" style="margin-top:8px">
+        <span class="nav-icon">↩</span> Sair
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Dashboard</div>
+            <div class="page-subtitle" id="dash-subtitle">Visão geral</div>
+          </div>
+        </div>
+        <div class="stats-grid" id="dash-stats"></div>
+        <div id="dash-content"></div>
+      </div>
+
+      <!-- INTERVENÇÕES -->
+      <div class="page" id="page-intervencoes">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Intervenções Técnicas</div>
+            <div class="page-subtitle">Registo e histórico de intervenções</div>
+          </div>
+          <button class="btn btn-primary admin-only" onclick="openIntervModal()">+ Nova Intervenção</button>
+        </div>
+        <div class="filters-row">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="interv-search" placeholder="Pesquisar..." oninput="renderIntervencoes()">
+          </div>
+          <select class="filter-select admin-only" id="interv-filter-client" onchange="renderIntervencoes()">
+            <option value="">Todos os clientes</option>
+          </select>
+        </div>
+        <div class="card" style="padding:0">
+          <div class="table-wrap" id="interv-table-wrap">
+            <div class="empty-state"><div class="spinner spinner-dark"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENTES -->
+      <div class="page" id="page-clientes">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Clientes</div>
+            <div class="page-subtitle">Gestão de clientes e pacotes de horas</div>
+          </div>
+          <button class="btn btn-primary" onclick="openClientModal()">+ Novo Cliente</button>
+        </div>
+        <div class="card" style="padding:0">
+          <div class="table-wrap" id="clients-table-wrap">
+            <div class="empty-state"><div class="spinner spinner-dark"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UTILIZADORES -->
+      <div class="page" id="page-utilizadores">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Utilizadores</div>
+            <div class="page-subtitle">Gestão de acessos ao portal</div>
+          </div>
+          <button class="btn btn-primary" onclick="openUserModal()">+ Novo Utilizador</button>
+        </div>
+        <div class="card" style="padding:0">
+          <div class="table-wrap" id="users-table-wrap">
+            <div class="empty-state"><div class="spinner spinner-dark"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL INTERVENÇÃO ═══ -->
+<div class="modal-overlay" id="modal-interv">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-interv-title">Nova Intervenção</div>
+      <span class="modal-close" onclick="closeModal('modal-interv')">✕</span>
+    </div>
+    <div class="field">
+      <label>Cliente *</label>
+      <select id="interv-cliente" onchange="updateHoursPreview()">
+        <option value="">Selecione o cliente...</option>
+      </select>
+    </div>
+    <div id="hours-preview-wrap" style="display:none">
+      <div class="hours-preview-box">
+        <div>
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text3);margin-bottom:2px">Horas disponíveis</div>
+          <div class="preview-num" id="preview-hours-left">0h</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:2px">Total contratado</div>
+          <div style="font-size:13px;font-family:var(--mono);color:var(--text2)" id="preview-hours-total">0h</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Data da intervenção *</label>
+        <input type="date" id="interv-data">
+      </div>
+      <div class="field">
+        <label>Horas utilizadas *</label>
+        <input type="number" id="interv-horas" min="0.25" max="24" step="0.25"
+          placeholder="ex: 2.5" oninput="checkHoursWarning()">
+      </div>
+    </div>
+    <div class="field">
+      <label>Local da intervenção</label>
+      <input type="text" id="interv-local" placeholder="ex: Sede do cliente, remoto...">
+    </div>
+    <div class="field">
+      <label>Motivo / Solicitação *</label>
+      <textarea id="interv-motivo" placeholder="Descreva o motivo da intervenção técnica..."></textarea>
+    </div>
+    <div class="field">
+      <label>Relatório do serviço executado</label>
+      <textarea id="interv-relatorio" placeholder="Descreva detalhadamente o que foi executado..."></textarea>
+    </div>
+    <div class="alert alert-warn" id="hours-warning" style="display:none">
+      ⚠ Atenção: esta intervenção excede as horas disponíveis do cliente.
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-interv')">Cancelar</button>
+      <button class="btn btn-primary" id="interv-save-btn" onclick="saveInterv()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL DETALHE ═══ -->
+<div class="modal-overlay" id="modal-detail">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-header">
+      <div class="modal-title">Detalhe da Intervenção</div>
+      <span class="modal-close" onclick="closeModal('modal-detail')">✕</span>
+    </div>
+    <div id="modal-detail-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-detail')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL CLIENTE ═══ -->
+<div class="modal-overlay" id="modal-client">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-client-title">Novo Cliente</div>
+      <span class="modal-close" onclick="closeModal('modal-client')">✕</span>
+    </div>
+    <div class="field">
+      <label>Nome da empresa *</label>
+      <input type="text" id="client-nome" placeholder="Nome da empresa">
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>NIF</label>
+        <input type="text" id="client-nif" placeholder="999999999">
+      </div>
+      <div class="field">
+        <label>Contacto</label>
+        <input type="text" id="client-contacto" placeholder="email ou telefone">
+      </div>
+    </div>
+    <div class="field">
+      <label>Morada</label>
+      <input type="text" id="client-morada" placeholder="Rua, cidade...">
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Horas contratadas *</label>
+        <input type="number" id="client-horas" min="0" step="0.5" placeholder="ex: 20">
+      </div>
+      <div class="field">
+        <label>Notas internas</label>
+        <input type="text" id="client-notas" placeholder="Observações...">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-client')">Cancelar</button>
+      <button class="btn btn-primary" id="client-save-btn" onclick="saveClient()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL HORAS ═══ -->
+<div class="modal-overlay" id="modal-hours">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title">Gerir Horas</div>
+      <span class="modal-close" onclick="closeModal('modal-hours')">✕</span>
+    </div>
+    <div id="modal-hours-info" style="margin-bottom:16px"></div>
+    <div class="field">
+      <label>Operação</label>
+      <select id="hours-op">
+        <option value="set">Definir total de horas</option>
+        <option value="add">Adicionar horas ao saldo</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Quantidade de horas</label>
+      <input type="number" id="hours-val" min="0" step="0.5" placeholder="0">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-hours')">Cancelar</button>
+      <button class="btn btn-primary" id="hours-save-btn" onclick="saveHours()">Actualizar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL UTILIZADOR ═══ -->
+<div class="modal-overlay" id="modal-user">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-user-title">Novo Utilizador</div>
+      <span class="modal-close" onclick="closeModal('modal-user')">✕</span>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Nome *</label>
+        <input type="text" id="user-nome" placeholder="Nome completo">
+      </div>
+      <div class="field">
+        <label>Função *</label>
+        <select id="user-role" onchange="toggleClientField()">
+          <option value="admin">Administrador</option>
+          <option value="client">Cliente (consulta)</option>
+        </select>
+      </div>
+    </div>
+    <div class="field" id="user-client-field" style="display:none">
+      <label>Cliente associado</label>
+      <select id="user-client-assoc">
+        <option value="">Selecione o cliente...</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Utilizador *</label>
+        <input type="text" id="user-username" placeholder="login">
+      </div>
+      <div class="field">
+        <label>Palavra-passe *</label>
+        <input type="password" id="user-pass" placeholder="••••••••">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-user')">Cancelar</button>
+      <button class="btn btn-primary" id="user-save-btn" onclick="saveUser()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════ -->
+<script>
+// ── SUPABASE CONFIG ──────────────────────────────────
+const SUPABASE_URL  = 'https://ucctisophjnikurfcugm.supabase.co';
+const SUPABASE_KEY  = 'sb_publishable_w6sCvTtA4TI5_-omPmksbA_qSVM9qvW';
+
+async function sb(path, method = 'GET', body = null, extra = '') {
+  const opts = {
+    method,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': method === 'POST' ? 'return=representation' : 'return=representation'
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}${extra}`, opts);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `Erro ${res.status}`);
+  }
+  if (res.status === 204) return null;
+  return res.json();
+}
+
+// GET com filtros
+function sbGet(table, query = '') { return sb(table + (query ? '?' + query : ''), 'GET'); }
+// INSERT
+function sbInsert(table, data) { return sb(table, 'POST', data); }
+// UPDATE por id
+function sbUpdate(table, id, data) { return sb(table + '?id=eq.' + id, 'PATCH', data); }
+// DELETE por id
+function sbDelete(table, id) { return sb(table + '?id=eq.' + id, 'DELETE'); }
+
+// ── STATE ────────────────────────────────────────────
+let currentUser = null;
+let loginRole = 'admin';
+let editingInterv = null;
+let editingClient = null;
+let editingUser = null;
+let editingHoursClient = null;
+
+// Cache local para evitar chamadas repetidas
+let cache = { clientes: null, intervencoes: null, utilizadores: null };
+
+// ── UTILS ────────────────────────────────────────────
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y, m, day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+function fmtH(h) {
+  const n = parseFloat(h) || 0;
+  return n % 1 === 0 ? n + 'h' : n.toFixed(1).replace('.', ',') + 'h';
+}
+function initials(name) {
+  return (name || '?').split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
+}
+function avatarColor(name) {
+  const colors = ['#c84b1e','#1a5fa8','#2e7d32','#6a0dad','#8a5e00','#b71c1c','#00695c','#1565c0'];
+  let h = 0;
+  for (let i = 0; i < (name||'').length; i++) h = (h + name.charCodeAt(i)) % colors.length;
+  return colors[h];
+}
+function hoursUsed(clientId) {
+  return (cache.intervencoes || [])
+    .filter(i => i.cliente_id === clientId)
+    .reduce((s, i) => s + parseFloat(i.horas || 0), 0);
+}
+function hoursLeft(client) {
+  return parseFloat(client.horas_contratadas || 0) - hoursUsed(client.id);
+}
+function showLoading(msg = 'A guardar...') {
+  document.getElementById('loading-msg').textContent = msg;
+  document.getElementById('loading-overlay').classList.add('show');
+}
+function hideLoading() {
+  document.getElementById('loading-overlay').classList.remove('show');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// ── AUTH ─────────────────────────────────────────────
+function setLoginRole(r) {
+  loginRole = r;
+  document.querySelectorAll('.role-tab').forEach((t, i) =>
+    t.classList.toggle('active', (r === 'admin' ? 0 : 1) === i)
+  );
+  document.getElementById('login-subtitle').textContent =
+    r === 'admin' ? 'Acesso ao painel técnico' : 'Portal de consulta do cliente';
+}
+
+async function doLogin() {
+  const username = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('login-btn');
+  errEl.classList.remove('show');
+  if (!username || !pass) { errEl.textContent = 'Preencha utilizador e palavra-passe.'; errEl.classList.add('show'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> A entrar...';
+
+  try {
+    const rows = await sbGet('utilizadores', `username=eq.${encodeURIComponent(username)}&pass=eq.${encodeURIComponent(pass)}&role=eq.${loginRole}&select=*`);
+    if (!rows || rows.length === 0) {
+      errEl.textContent = 'Credenciais inválidas. Tente novamente.';
+      errEl.classList.add('show');
+      return;
+    }
+    currentUser = rows[0];
+    await startApp();
+  } catch (e) {
+    errEl.textContent = 'Erro de ligação: ' + e.message;
+    errEl.classList.add('show');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Entrar';
+  }
+}
+
+async function startApp() {
+  document.getElementById('login-screen').classList.remove('active');
+  document.getElementById('main-screen').classList.add('active');
+  document.getElementById('topbar-name').textContent = currentUser.nome;
+  const roleEl = document.getElementById('topbar-role');
+  roleEl.textContent = currentUser.role === 'admin' ? 'Administração' : 'Cliente';
+  roleEl.className = 'badge-role ' + (currentUser.role === 'admin' ? 'badge-admin' : 'badge-client');
+  document.querySelectorAll('.admin-only').forEach(el =>
+    el.style.display = currentUser.role === 'admin' ? '' : 'none'
+  );
+  // Pré-carregar dados
+  showLoading('A carregar dados...');
+  try {
+    await loadAllData();
+  } finally {
+    hideLoading();
+  }
+  showPage('dashboard');
+}
+
+function doLogout() {
+  currentUser = null;
+  cache = { clientes: null, intervencoes: null, utilizadores: null };
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('main-screen').classList.remove('active');
+  document.getElementById('login-screen').classList.add('active');
+}
+
+// ── DATA LOADING ─────────────────────────────────────
+async function loadAllData() {
+  const [clientes, intervencoes, utilizadores] = await Promise.all([
+    sbGet('clientes', 'order=nome.asc'),
+    sbGet('intervencoes', 'order=data.desc'),
+    sbGet('utilizadores', 'order=nome.asc')
+  ]);
+  cache.clientes = clientes || [];
+  cache.intervencoes = intervencoes || [];
+  cache.utilizadores = utilizadores || [];
+}
+
+async function reloadClientes() {
+  cache.clientes = await sbGet('clientes', 'order=nome.asc') || [];
+}
+async function reloadIntervencoes() {
+  cache.intervencoes = await sbGet('intervencoes', 'order=data.desc') || [];
+}
+async function reloadUtilizadores() {
+  cache.utilizadores = await sbGet('utilizadores', 'order=nome.asc') || [];
+}
+
+// ── NAVIGATION ───────────────────────────────────────
+function showPage(pg) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + pg).classList.add('active');
+  const nav = document.getElementById('nav-' + pg);
+  if (nav) nav.classList.add('active');
+  if (pg === 'dashboard') renderDash();
+  if (pg === 'intervencoes') renderIntervencoes();
+  if (pg === 'clientes') renderClientes();
+  if (pg === 'utilizadores') renderUtilizadores();
+}
+
+// ── DASHBOARD ────────────────────────────────────────
+function renderDash() {
+  const isAdmin = currentUser.role === 'admin';
+  if (isAdmin) {
+    const totalUsed = cache.intervencoes.reduce((s, i) => s + parseFloat(i.horas || 0), 0);
+    const critClients = cache.clientes.filter(c => hoursLeft(c) <= 2).length;
+    document.getElementById('dash-subtitle').textContent = 'Visão geral do sistema';
+    document.getElementById('dash-stats').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Clientes activos</div><div class="stat-value blue">${cache.clientes.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Intervenções totais</div><div class="stat-value">${cache.intervencoes.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Horas consumidas</div><div class="stat-value accent">${fmtH(totalUsed)}</div></div>
+      <div class="stat-card"><div class="stat-label">Horas críticas</div><div class="stat-value ${critClients > 0 ? 'red' : 'green'}">${critClients}</div></div>
+    `;
+
+    let html = '';
+    if (critClients > 0) {
+      html += `<div class="alert alert-warn">⚠ ${critClients} cliente(s) com menos de 2 horas disponíveis. Considere contactar para renovação.</div>`;
+    }
+
+    html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px">`;
+
+    // Coluna esquerda: horas por cliente
+    html += `<div class="card"><div class="card-title">Horas por cliente</div>`;
+    if (cache.clientes.length === 0) {
+      html += `<div style="color:var(--text3);font-size:13px">Sem clientes registados.</div>`;
+    } else {
+      cache.clientes.forEach(c => {
+        const left = hoursLeft(c);
+        const used = hoursUsed(c.id);
+        const total = parseFloat(c.horas_contratadas) || 0;
+        const pct = total > 0 ? Math.min(100, (used / total) * 100) : 0;
+        const cls = left <= 2 ? 'critical' : left <= 5 ? 'warn' : 'ok';
+        const color = left <= 2 ? 'var(--red)' : left <= 5 ? 'var(--amber)' : 'var(--green)';
+        html += `
+          <div style="margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <div class="client-avatar" style="width:26px;height:26px;font-size:10px;background:${avatarColor(c.nome)}">${initials(c.nome)}</div>
+              <div style="flex:1;font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.nome}</div>
+              <div style="font-size:12px;font-family:var(--mono);color:${color};white-space:nowrap">${fmtH(left)}</div>
+            </div>
+            <div class="hours-bar"><div class="hours-fill ${cls}" style="width:${pct}%"></div></div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px">${fmtH(used)} de ${fmtH(total)} utilizadas</div>
+          </div>`;
+      });
+    }
+    html += `</div>`;
+
+    // Coluna direita: intervenções recentes
+    const recent = cache.intervencoes.slice(0, 6);
+    html += `<div class="card"><div class="card-title">Intervenções recentes</div>`;
+    if (recent.length === 0) {
+      html += `<div style="color:var(--text3);font-size:13px">Sem intervenções registadas.</div>`;
+    } else {
+      recent.forEach(i => {
+        const c = cache.clientes.find(x => x.id === i.cliente_id);
+        html += `
+          <div style="border-bottom:1px solid var(--border);padding:10px 0;cursor:pointer" onclick="showDetail('${i.id}')">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+              <div style="font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c ? c.nome : '—'}</div>
+              <span class="tag tag-accent" style="flex-shrink:0">${fmtH(i.horas)}</span>
+            </div>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">${fmtDate(i.data)} · ${i.local || 'sem local'}</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${i.motivo || ''}</div>
+          </div>`;
+      });
+    }
+    html += `</div></div>`;
+    document.getElementById('dash-content').innerHTML = html;
+
+  } else {
+    // Vista cliente
+    const client = cache.clientes.find(c => c.id === currentUser.cliente_id);
+    if (!client) {
+      document.getElementById('dash-stats').innerHTML = '';
+      document.getElementById('dash-content').innerHTML = `<div class="alert alert-warn">Conta não associada a nenhum cliente. Contacte a EquipeTec.</div>`;
+      return;
+    }
+    const left = hoursLeft(client);
+    const used = hoursUsed(client.id);
+    const total = parseFloat(client.horas_contratadas) || 0;
+    const pct = total > 0 ? Math.min(100, (used / total) * 100) : 0;
+    const cls = left <= 2 ? 'critical' : left <= 5 ? 'warn' : 'ok';
+
+    document.getElementById('dash-subtitle').textContent = client.nome;
+    document.getElementById('dash-stats').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Horas contratadas</div><div class="stat-value">${fmtH(total)}</div></div>
+      <div class="stat-card"><div class="stat-label">Horas utilizadas</div><div class="stat-value accent">${fmtH(used)}</div></div>
+      <div class="stat-card"><div class="stat-label">Horas disponíveis</div><div class="stat-value ${left <= 2 ? 'red' : 'green'}">${fmtH(left)}</div></div>
+      <div class="stat-card"><div class="stat-label">Intervenções</div><div class="stat-value blue">${cache.intervencoes.filter(i => i.cliente_id === client.id).length}</div></div>
+    `;
+
+    let html = left <= 2 ? `<div class="alert alert-warn">⚠ As suas horas estão quase esgotadas. Contacte a EquipeTec para renovar.</div>` : '';
+    html += `
+      <div class="card">
+        <div class="card-title">Utilização de horas</div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text2);margin-bottom:8px">
+          <span>${fmtH(used)} utilizadas</span><span>${fmtH(left)} restantes</span>
+        </div>
+        <div class="hours-bar" style="height:10px"><div class="hours-fill ${cls}" style="width:${pct}%"></div></div>
+        <div style="font-size:12px;color:var(--text3);margin-top:6px">${Math.round(pct)}% do pacote consumido</div>
+      </div>`;
+    document.getElementById('dash-content').innerHTML = html;
+  }
+}
+
+// ── INTERVENÇÕES ─────────────────────────────────────
+function renderIntervencoes() {
+  const search = (document.getElementById('interv-search').value || '').toLowerCase();
+  const filterCid = document.getElementById('interv-filter-client')?.value || '';
+
+  // Atualizar select de filtro
+  const sel = document.getElementById('interv-filter-client');
+  if (sel) {
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">Todos os clientes</option>' +
+      cache.clientes.map(c => `<option value="${c.id}" ${c.id === cur ? 'selected' : ''}>${c.nome}</option>`).join('');
+  }
+
+  let list = [...cache.intervencoes];
+
+  if (currentUser.role === 'client') {
+    list = list.filter(i => i.cliente_id === currentUser.cliente_id);
+  } else if (filterCid) {
+    list = list.filter(i => i.cliente_id === filterCid);
+  }
+
+  if (search) {
+    list = list.filter(i => {
+      const c = cache.clientes.find(x => x.id === i.cliente_id);
+      return (c?.nome || '').toLowerCase().includes(search)
+        || (i.motivo || '').toLowerCase().includes(search)
+        || (i.local || '').toLowerCase().includes(search)
+        || (i.relatorio || '').toLowerCase().includes(search);
+    });
+  }
+
+  if (list.length === 0) {
+    document.getElementById('interv-table-wrap').innerHTML =
+      `<div class="empty-state"><div class="empty-icon">🔧</div><div class="empty-title">Sem intervenções</div><div class="empty-sub">Nenhuma intervenção encontrada.</div></div>`;
+    return;
+  }
+
+  const isAdmin = currentUser.role === 'admin';
+  let html = `<table><thead><tr>
+    <th>Data</th>${isAdmin ? '<th>Cliente</th>' : ''}
+    <th>Local</th><th>Motivo</th><th>Horas</th><th>Ações</th>
+  </tr></thead><tbody>`;
+
+  list.forEach(i => {
+    const c = cache.clientes.find(x => x.id === i.cliente_id);
+    html += `<tr>
+      <td style="font-family:var(--mono);font-size:12px;white-space:nowrap">${fmtDate(i.data)}</td>
+      ${isAdmin ? `<td><div class="client-row">
+        <div class="client-avatar" style="width:26px;height:26px;font-size:10px;background:${avatarColor(c?.nome||'?')}">${initials(c?.nome||'?')}</div>
+        <span>${c?.nome || '—'}</span>
+      </div></td>` : ''}
+      <td style="font-size:13px;color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${i.local || '—'}</td>
+      <td style="max-width:220px"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${i.motivo || '—'}</div></td>
+      <td><span class="tag tag-blue">${fmtH(i.horas)}</span></td>
+      <td><div class="td-actions">
+        <button class="btn btn-outline btn-sm" onclick="showDetail('${i.id}')">Ver</button>
+        ${isAdmin ? `
+        <button class="btn btn-outline btn-sm" onclick="editIntervModal('${i.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteInterv('${i.id}')">Apagar</button>` : ''}
+      </div></td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('interv-table-wrap').innerHTML = html;
+}
+
+function openIntervModal() {
+  editingInterv = null;
+  document.getElementById('modal-interv-title').textContent = 'Nova Intervenção';
+  document.getElementById('interv-cliente').innerHTML =
+    '<option value="">Selecione o cliente...</option>' +
+    cache.clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+  document.getElementById('interv-data').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('interv-horas').value = '';
+  document.getElementById('interv-local').value = '';
+  document.getElementById('interv-motivo').value = '';
+  document.getElementById('interv-relatorio').value = '';
+  document.getElementById('hours-preview-wrap').style.display = 'none';
+  document.getElementById('hours-warning').style.display = 'none';
+  document.getElementById('modal-interv').classList.add('open');
+}
+
+function editIntervModal(id) {
+  const i = cache.intervencoes.find(x => x.id === id);
+  if (!i) return;
+  editingInterv = id;
+  document.getElementById('modal-interv-title').textContent = 'Editar Intervenção';
+  document.getElementById('interv-cliente').innerHTML =
+    '<option value="">Selecione o cliente...</option>' +
+    cache.clientes.map(c => `<option value="${c.id}" ${c.id === i.cliente_id ? 'selected' : ''}>${c.nome}</option>`).join('');
+  document.getElementById('interv-data').value = i.data;
+  document.getElementById('interv-horas').value = i.horas;
+  document.getElementById('interv-local').value = i.local || '';
+  document.getElementById('interv-motivo').value = i.motivo || '';
+  document.getElementById('interv-relatorio').value = i.relatorio || '';
+  updateHoursPreview();
+  document.getElementById('modal-interv').classList.add('open');
+}
+
+function updateHoursPreview() {
+  const cid = document.getElementById('interv-cliente').value;
+  const wrap = document.getElementById('hours-preview-wrap');
+  if (!cid) { wrap.style.display = 'none'; return; }
+  const c = cache.clientes.find(x => x.id === cid);
+  if (!c) { wrap.style.display = 'none'; return; }
+  let left = hoursLeft(c);
+  if (editingInterv) {
+    const old = cache.intervencoes.find(i => i.id === editingInterv);
+    if (old && old.cliente_id === cid) left += parseFloat(old.horas || 0);
+  }
+  const total = parseFloat(c.horas_contratadas) || 0;
+  const el = document.getElementById('preview-hours-left');
+  el.textContent = fmtH(left);
+  el.className = 'preview-num ' + (left <= 2 ? 'low' : left <= 5 ? 'mid' : 'ok');
+  document.getElementById('preview-hours-total').textContent = fmtH(total);
+  wrap.style.display = 'flex';
+  checkHoursWarning();
+}
+
+function checkHoursWarning() {
+  const cid = document.getElementById('interv-cliente').value;
+  const h = parseFloat(document.getElementById('interv-horas').value) || 0;
+  const warn = document.getElementById('hours-warning');
+  if (!cid || h <= 0) { warn.style.display = 'none'; return; }
+  const c = cache.clientes.find(x => x.id === cid);
+  if (!c) { warn.style.display = 'none'; return; }
+  let left = hoursLeft(c);
+  if (editingInterv) {
+    const old = cache.intervencoes.find(i => i.id === editingInterv);
+    if (old && old.cliente_id === cid) left += parseFloat(old.horas || 0);
+  }
+  warn.style.display = h > left ? 'block' : 'none';
+}
+
+async function saveInterv() {
+  const cliente_id = document.getElementById('interv-cliente').value;
+  const data = document.getElementById('interv-data').value;
+  const horas = parseFloat(document.getElementById('interv-horas').value);
+  const motivo = document.getElementById('interv-motivo').value.trim();
+  if (!cliente_id || !data || !horas || !motivo) {
+    alert('Preencha os campos obrigatórios (*)'); return;
+  }
+  const payload = {
+    cliente_id, data, horas,
+    local: document.getElementById('interv-local').value.trim(),
+    motivo,
+    relatorio: document.getElementById('interv-relatorio').value.trim()
+  };
+  const btn = document.getElementById('interv-save-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    if (editingInterv) {
+      await sbUpdate('intervencoes', editingInterv, payload);
+    } else {
+      await sbInsert('intervencoes', payload);
+    }
+    closeModal('modal-interv');
+    await reloadIntervencoes();
+    renderIntervencoes();
+    renderDash();
+  } catch (e) {
+    alert('Erro ao guardar: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Guardar';
+  }
+}
+
+async function deleteInterv(id) {
+  if (!confirm('Tem a certeza que pretende apagar esta intervenção?')) return;
+  showLoading('A apagar...');
+  try {
+    await sbDelete('intervencoes', id);
+    await reloadIntervencoes();
+    renderIntervencoes();
+    renderDash();
+  } catch (e) {
+    alert('Erro: ' + e.message);
+  } finally {
+    hideLoading();
+  }
+}
+
+function showDetail(id) {
+  const i = cache.intervencoes.find(x => x.id === id);
+  if (!i) return;
+  const c = cache.clientes.find(x => x.id === i.cliente_id);
+  document.getElementById('modal-detail-body').innerHTML = `
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-label">Cliente</div><div class="detail-value">${c?.nome || '—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Data</div><div class="detail-value" style="font-family:var(--mono)">${fmtDate(i.data)}</div></div>
+      <div class="detail-item"><div class="detail-label">Local</div><div class="detail-value">${i.local || '—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Horas utilizadas</div><div class="detail-value" style="color:var(--accent);font-family:var(--mono)">${fmtH(i.horas)}</div></div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div class="detail-label" style="margin-bottom:6px">Motivo / Solicitação</div>
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;font-size:14px;line-height:1.6">${i.motivo || '—'}</div>
+    </div>
+    <div>
+      <div class="detail-label" style="margin-bottom:6px">Relatório do serviço executado</div>
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;font-size:14px;line-height:1.6">${i.relatorio || 'Sem relatório registado.'}</div>
+    </div>
+  `;
+  document.getElementById('modal-detail').classList.add('open');
+}
+
+// ── CLIENTES ─────────────────────────────────────────
+function renderClientes() {
+  if (cache.clientes.length === 0) {
+    document.getElementById('clients-table-wrap').innerHTML =
+      `<div class="empty-state"><div class="empty-icon">🏢</div><div class="empty-title">Sem clientes</div><div class="empty-sub">Adicione o primeiro cliente.</div></div>`;
+    return;
+  }
+  let html = `<table><thead><tr>
+    <th>Cliente</th><th>NIF</th><th>Contacto</th><th>Horas disponíveis</th><th>Ações</th>
+  </tr></thead><tbody>`;
+  cache.clientes.forEach(c => {
+    const left = hoursLeft(c);
+    const used = hoursUsed(c.id);
+    const total = parseFloat(c.horas_contratadas) || 0;
+    const pct = total > 0 ? Math.min(100, (used / total) * 100) : 0;
+    const cls = left <= 2 ? 'critical' : left <= 5 ? 'warn' : 'ok';
+    const tagCls = left <= 2 ? 'tag-red' : left <= 5 ? 'tag-amber' : 'tag-green';
+    html += `<tr>
+      <td>
+        <div class="client-row">
+          <div class="client-avatar" style="background:${avatarColor(c.nome)}">${initials(c.nome)}</div>
+          <div><div style="font-weight:500">${c.nome}</div><div style="font-size:12px;color:var(--text3)">${c.morada || ''}</div></div>
+        </div>
+      </td>
+      <td style="font-family:var(--mono);font-size:12px">${c.nif || '—'}</td>
+      <td style="font-size:13px;color:var(--text2)">${c.contacto || '—'}</td>
+      <td style="min-width:160px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span class="tag ${tagCls}">${fmtH(left)} restantes</span>
+          <span style="font-size:11px;color:var(--text3);font-family:var(--mono)">${fmtH(total)}</span>
+        </div>
+        <div class="hours-bar"><div class="hours-fill ${cls}" style="width:${pct}%"></div></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">${fmtH(used)} utilizadas</div>
+      </td>
+      <td><div class="td-actions">
+        <button class="btn btn-blue btn-sm" onclick="openHoursModal('${c.id}')">Horas</button>
+        <button class="btn btn-outline btn-sm" onclick="editClientModal('${c.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteClient('${c.id}')">Apagar</button>
+      </div></td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('clients-table-wrap').innerHTML = html;
+}
+
+function openClientModal() {
+  editingClient = null;
+  document.getElementById('modal-client-title').textContent = 'Novo Cliente';
+  ['client-nome','client-nif','client-contacto','client-morada','client-notas'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('client-horas').value = '';
+  document.getElementById('modal-client').classList.add('open');
+}
+
+function editClientModal(id) {
+  const c = cache.clientes.find(x => x.id === id);
+  if (!c) return;
+  editingClient = id;
+  document.getElementById('modal-client-title').textContent = 'Editar Cliente';
+  document.getElementById('client-nome').value = c.nome || '';
+  document.getElementById('client-nif').value = c.nif || '';
+  document.getElementById('client-contacto').value = c.contacto || '';
+  document.getElementById('client-morada').value = c.morada || '';
+  document.getElementById('client-horas').value = c.horas_contratadas || '';
+  document.getElementById('client-notas').value = c.notas || '';
+  document.getElementById('modal-client').classList.add('open');
+}
+
+async function saveClient() {
+  const nome = document.getElementById('client-nome').value.trim();
+  const horas = parseFloat(document.getElementById('client-horas').value);
+  if (!nome || isNaN(horas)) { alert('Preencha o nome e as horas contratadas.'); return; }
+  const payload = {
+    nome,
+    nif: document.getElementById('client-nif').value.trim(),
+    contacto: document.getElementById('client-contacto').value.trim(),
+    morada: document.getElementById('client-morada').value.trim(),
+    horas_contratadas: horas,
+    notas: document.getElementById('client-notas').value.trim()
+  };
+  const btn = document.getElementById('client-save-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    if (editingClient) {
+      await sbUpdate('clientes', editingClient, payload);
+    } else {
+      await sbInsert('clientes', payload);
+    }
+    closeModal('modal-client');
+    await reloadClientes();
+    renderClientes();
+    renderDash();
+  } catch (e) {
+    alert('Erro ao guardar: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Guardar';
+  }
+}
+
+async function deleteClient(id) {
+  if (!confirm('Apagar este cliente e todas as suas intervenções?')) return;
+  showLoading('A apagar...');
+  try {
+    await sbDelete('clientes', id);
+    await loadAllData();
+    renderClientes();
+    renderDash();
+  } catch (e) {
+    alert('Erro: ' + e.message);
+  } finally {
+    hideLoading();
+  }
+}
+
+function openHoursModal(id) {
+  const c = cache.clientes.find(x => x.id === id);
+  if (!c) return;
+  editingHoursClient = id;
+  const left = hoursLeft(c);
+  const used = hoursUsed(c.id);
+  document.getElementById('modal-hours-info').innerHTML = `
+    <div class="hours-preview-box">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--text3);margin-bottom:2px">${c.nome}</div>
+        <div style="font-size:13px;color:var(--text2)">${fmtH(used)} usadas · ${fmtH(c.horas_contratadas)} contratadas</div>
+      </div>
+      <div style="text-align:right">
+        <div class="preview-num ${left <= 2 ? 'low' : left <= 5 ? 'mid' : 'ok'}">${fmtH(left)}</div>
+        <div style="font-size:11px;color:var(--text3)">disponíveis</div>
+      </div>
+    </div>`;
+  document.getElementById('hours-val').value = '';
+  document.getElementById('hours-op').value = 'set';
+  document.getElementById('modal-hours').classList.add('open');
+}
+
+async function saveHours() {
+  const val = parseFloat(document.getElementById('hours-val').value);
+  const op = document.getElementById('hours-op').value;
+  if (isNaN(val) || val < 0) { alert('Introduza um valor válido.'); return; }
+  const c = cache.clientes.find(x => x.id === editingHoursClient);
+  const newTotal = op === 'set' ? val : parseFloat(c.horas_contratadas || 0) + val;
+  const btn = document.getElementById('hours-save-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    await sbUpdate('clientes', editingHoursClient, { horas_contratadas: newTotal });
+    closeModal('modal-hours');
+    await reloadClientes();
+    renderClientes();
+    renderDash();
+  } catch (e) {
+    alert('Erro: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Actualizar';
+  }
+}
+
+// ── UTILIZADORES ─────────────────────────────────────
+function renderUtilizadores() {
+  if (cache.utilizadores.length === 0) {
+    document.getElementById('users-table-wrap').innerHTML =
+      `<div class="empty-state"><div class="empty-icon">👤</div><div class="empty-title">Sem utilizadores</div></div>`;
+    return;
+  }
+  let html = `<table><thead><tr>
+    <th>Nome</th><th>Utilizador</th><th>Função</th><th>Cliente associado</th><th>Ações</th>
+  </tr></thead><tbody>`;
+  cache.utilizadores.forEach(u => {
+    const c = cache.clientes.find(x => x.id === u.cliente_id);
+    html += `<tr>
+      <td style="font-weight:500">${u.nome}</td>
+      <td style="font-family:var(--mono);font-size:12px">${u.username}</td>
+      <td><span class="tag ${u.role === 'admin' ? 'tag-accent' : 'tag-blue'}">${u.role === 'admin' ? 'Administrador' : 'Cliente'}</span></td>
+      <td>${c ? c.nome : '—'}</td>
+      <td><div class="td-actions">
+        <button class="btn btn-outline btn-sm" onclick="editUserModal('${u.id}')">Editar</button>
+        ${u.id !== currentUser.id
+          ? `<button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">Apagar</button>`
+          : '<span style="font-size:11px;color:var(--text3)">Eu</span>'}
+      </div></td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('users-table-wrap').innerHTML = html;
+}
+
+function toggleClientField() {
+  const role = document.getElementById('user-role').value;
+  document.getElementById('user-client-field').style.display = role === 'client' ? 'block' : 'none';
+}
+
+function openUserModal() {
+  editingUser = null;
+  document.getElementById('modal-user-title').textContent = 'Novo Utilizador';
+  ['user-nome','user-username','user-pass'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('user-role').value = 'admin';
+  document.getElementById('user-client-field').style.display = 'none';
+  document.getElementById('user-client-assoc').innerHTML =
+    '<option value="">Selecione o cliente...</option>' +
+    cache.clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+  document.getElementById('modal-user').classList.add('open');
+}
+
+function editUserModal(id) {
+  const u = cache.utilizadores.find(x => x.id === id);
+  if (!u) return;
+  editingUser = id;
+  document.getElementById('modal-user-title').textContent = 'Editar Utilizador';
+  document.getElementById('user-nome').value = u.nome || '';
+  document.getElementById('user-username').value = u.username || '';
+  document.getElementById('user-pass').value = u.pass || '';
+  document.getElementById('user-role').value = u.role || 'admin';
+  document.getElementById('user-client-assoc').innerHTML =
+    '<option value="">Selecione o cliente...</option>' +
+    cache.clientes.map(c => `<option value="${c.id}" ${c.id === u.cliente_id ? 'selected' : ''}>${c.nome}</option>`).join('');
+  document.getElementById('user-client-field').style.display = u.role === 'client' ? 'block' : 'none';
+  document.getElementById('modal-user').classList.add('open');
+}
+
+async function saveUser() {
+  const nome = document.getElementById('user-nome').value.trim();
+  const username = document.getElementById('user-username').value.trim();
+  const pass = document.getElementById('user-pass').value;
+  const role = document.getElementById('user-role').value;
+  const cliente_id = role === 'client' ? (document.getElementById('user-client-assoc').value || null) : null;
+  if (!nome || !username || !pass) { alert('Preencha todos os campos obrigatórios.'); return; }
+  const dup = cache.utilizadores.find(u => u.username === username && u.id !== editingUser);
+  if (dup) { alert('Este nome de utilizador já existe.'); return; }
+  const payload = { nome, username, pass, role, cliente_id };
+  const btn = document.getElementById('user-save-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    if (editingUser) {
+      await sbUpdate('utilizadores', editingUser, payload);
+    } else {
+      await sbInsert('utilizadores', payload);
+    }
+    closeModal('modal-user');
+    await reloadUtilizadores();
+    renderUtilizadores();
+  } catch (e) {
+    alert('Erro ao guardar: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Guardar';
+  }
+}
+
+async function deleteUser(id) {
+  if (!confirm('Apagar este utilizador?')) return;
+  showLoading('A apagar...');
+  try {
+    await sbDelete('utilizadores', id);
+    await reloadUtilizadores();
+    renderUtilizadores();
+  } catch (e) {
+    alert('Erro: ' + e.message);
+  } finally {
+    hideLoading();
+  }
+}
+
+// ── MODAL CLOSE ON OUTSIDE CLICK ─────────────────────
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+</script>
+</body>
+</html>
