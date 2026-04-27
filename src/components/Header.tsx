@@ -82,7 +82,14 @@ export default function Header() {
               <MessageSquare size={20} />
               Falar no WhatsApp
             </a>
-          </motion.div>
+            
+          href="/portal.html"
+          onClick={() => setIsMenuOpen(false)}
+          className="bg-slate-100 text-slate-700 p-4 rounded-xl text-center font-bold flex items-center justify-center gap-2"
+        >
+          🔧 Área Técnica
+        </a>
+      </motion.div>
         )}
       </AnimatePresence>
     </nav>
