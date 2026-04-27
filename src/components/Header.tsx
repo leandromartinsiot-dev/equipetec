@@ -4,14 +4,12 @@ import { useState } from 'react';
 import { MessageSquare, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-const navItems = ['Serviços', 'Sobre', 'Testemunhos', 'Contacto'];
-
-const navHrefs: Record<string, string> = {
-  'Serviços': '#servicos',
-  'Sobre': '#sobre',
-  'Testemunhos': '#testemunhos',
-  'Contacto': '#contacto',
-};
+const navItems = [
+  { label: 'Serviços', href: '#servicos' },
+  { label: 'Sobre', href: '#sobre' },
+  { label: 'Testemunhos', href: '#testemunhos' },
+  { label: 'Contacto', href: '#contacto' },
+];
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,18 +29,18 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             
-              key={item}
-              href={navHrefs[item]}
+              key={item.label}
+              href={item.href}
               className="text-sm font-medium text-slate-600 hover:text-brand-accent transition-colors"
             >
-              {item}
+              {item.label}
             </a>
           ))}
           
             href="/portal.html"
             className="bg-slate-100 text-slate-700 px-4 py-2 rounded-full text-sm font-semibold hover:bg-slate-200 transition-all flex items-center gap-2"
           >
-            🔧 Área Técnica
+            Área Técnica
           </a>
           
             href="https://wa.me/351939799996"
@@ -76,12 +74,12 @@ export default function Header() {
           >
             {navItems.map((item) => (
               
-                key={item}
-                href={navHrefs[item]}
+                key={item.label}
+                href={item.href}
                 onClick={() => setIsMenuOpen(false)}
                 className="text-left py-2 text-lg font-medium text-slate-700"
               >
-                {item}
+                {item.label}
               </a>
             ))}
             
@@ -89,7 +87,7 @@ export default function Header() {
               onClick={() => setIsMenuOpen(false)}
               className="bg-slate-100 text-slate-700 p-4 rounded-xl text-center font-bold flex items-center justify-center gap-2"
             >
-              🔧 Área Técnica
+              Área Técnica
             </a>
             
               href="https://wa.me/351939799996"
