@@ -39,7 +39,7 @@ export default function Header() {
             href="/portal.html"
             className="bg-slate-100 text-slate-700 px-4 py-2 rounded-full text-sm font-semibold hover:bg-slate-200 transition-all flex items-center gap-2"
           >
-            Area Tecnica
+            Área Técnica
           </a>
           <a
             href="https://wa.me/351939799996"
