@@ -4,7 +4,12 @@ import { useState } from 'react';
 import { MessageSquare, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-const navItems = ['Serviços', 'Sobre', 'Testemunhos', 'Contacto'];
+const navItems = [
+  { label: 'Serviços', href: '#servicos' },
+  { label: 'Sobre', href: '#sobre' },
+  { label: 'Testemunhos', href: '#testemunhos' },
+  { label: 'Contacto', href: '#contacto' },
+];
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,11 +33,11 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
+              key={item.label}
+              href={item.href}
               className="text-sm font-medium text-slate-600 hover:text-brand-accent transition-colors"
             >
-              {item}
+              {item.label}
             </a>
           ))}
           <a
@@ -73,12 +78,12 @@ export default function Header() {
           >
             {navItems.map((item) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={item.label}
+                href={item.href}
                 onClick={() => setIsMenuOpen(false)}
                 className="text-left py-2 text-lg font-medium text-slate-700"
               >
-                {item}
+                {item.label}
               </a>
             ))}
             <a
