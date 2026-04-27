@@ -5,7 +5,7 @@ import { MessageSquare, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 const navItems = [
-  { label: 'Serviços', href: '#servicos' },
+  { label: 'Servicos', href: '#servicos' },
   { label: 'Sobre', href: '#sobre' },
   { label: 'Testemunhos', href: '#testemunhos' },
   { label: 'Contacto', href: '#contacto' },
@@ -21,14 +21,13 @@ export default function Header() {
           <img src="/logo.png" alt="Equipetec" className="w-10 h-10 rounded-lg object-contain" />
           <div className="flex flex-col">
             <span className="font-bold text-slate-900 leading-tight">EQUIPETEC</span>
-            <span className="text-xs text-slate-500 font-mono uppercase tracking-wider">Serviços Informaticos</span>
+            <span className="text-xs text-slate-500 font-mono uppercase tracking-wider">Servicos Informaticos</span>
           </div>
         </a>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
-            
+            <a
               key={item.label}
               href={item.href}
               className="text-sm font-medium text-slate-600 hover:text-brand-accent transition-colors"
@@ -36,13 +35,13 @@ export default function Header() {
               {item.label}
             </a>
           ))}
-          
+          <a
             href="/portal.html"
             className="bg-slate-100 text-slate-700 px-4 py-2 rounded-full text-sm font-semibold hover:bg-slate-200 transition-all flex items-center gap-2"
           >
-            Área Técnica
+            Area Tecnica
           </a>
-          
+          <a
             href="https://wa.me/351939799996"
             target="_blank"
             rel="noopener noreferrer"
@@ -53,7 +52,6 @@ export default function Header() {
           </a>
         </div>
 
-        {/* Mobile Toggle */}
         <button
           className="md:hidden p-2 text-slate-600"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -63,7 +61,6 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -73,7 +70,7 @@ export default function Header() {
             className="absolute top-20 left-0 w-full bg-white border-b border-slate-200 p-6 md:hidden flex flex-col gap-4 shadow-xl"
           >
             {navItems.map((item) => (
-              
+              <a
                 key={item.label}
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
@@ -82,14 +79,14 @@ export default function Header() {
                 {item.label}
               </a>
             ))}
-            
+            <a
               href="/portal.html"
               onClick={() => setIsMenuOpen(false)}
               className="bg-slate-100 text-slate-700 p-4 rounded-xl text-center font-bold flex items-center justify-center gap-2"
             >
-              Área Técnica
+              Area Tecnica
             </a>
-            
+            <a
               href="https://wa.me/351939799996"
               className="bg-brand-primary text-white p-4 rounded-xl text-center font-bold flex items-center justify-center gap-2"
             >
