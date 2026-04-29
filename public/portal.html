@@ -766,7 +766,7 @@ function doLogout() {
 async function loadAllData() {
   const [clientes, intervencoes, utilizadores] = await Promise.all([
     sbGet('clientes', 'order=nome.asc'),
-    sbGet('intervencoes', 'order=data.desc'),
+    sbGet('intervencoes', 'order=data.desc&select=*'),
     sbGet('utilizadores', 'order=nome.asc')
   ]);
   cache.clientes = clientes || [];
@@ -778,7 +778,7 @@ async function reloadClientes() {
   cache.clientes = await sbGet('clientes', 'order=nome.asc') || [];
 }
 async function reloadIntervencoes() {
-  cache.intervencoes = await sbGet('intervencoes', 'order=data.desc') || [];
+  cache.intervencoes = await sbGet('intervencoes', 'order=data.desc&select=*') || [];
 }
 async function reloadUtilizadores() {
   cache.utilizadores = await sbGet('utilizadores', 'order=nome.asc') || [];
@@ -941,13 +941,14 @@ function renderIntervencoes() {
 
   const isAdmin = currentUser.role === 'admin';
   let html = `<table><thead><tr>
-    <th>Data</th>${isAdmin ? '<th>Cliente</th>' : ''}
+    <th>Nº</th><th>Data</th>${isAdmin ? '<th>Cliente</th>' : ''}
     <th>Local</th><th>Motivo</th><th>Horas</th><th>Ações</th>
   </tr></thead><tbody>`;
 
   list.forEach(i => {
     const c = cache.clientes.find(x => x.id === i.cliente_id);
     html += `<tr>
+      <td style="font-family:var(--mono);font-size:12px;white-space:nowrap;color:var(--accent);font-weight:600">${i.numero || '—'}</td>
       <td style="font-family:var(--mono);font-size:12px;white-space:nowrap">${fmtDate(i.data)}</td>
       ${isAdmin ? `<td><div class="client-row">
         <div class="client-avatar" style="width:26px;height:26px;font-size:10px;background:${avatarColor(c?.nome||'?')}">${initials(c?.nome||'?')}</div>
