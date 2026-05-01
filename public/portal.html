@@ -462,7 +462,7 @@
       </div>
     </div>
     <div class="field">
-      <label>Local e tipo de atendimento *</label>
+      <label>Tipo de atendimento *</label>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
         <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-weight:400">
           <input type="checkbox" id="local-presencial" onchange="toggleLocal(this)" style="width:16px;height:16px;accent-color:var(--accent)"> No local
@@ -479,10 +479,10 @@
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-weight:400">
-          <input type="checkbox" id="atend-normal" onchange="toggleAtend(this)" style="width:16px;height:16px;accent-color:var(--accent)"> Atendimento Normal
+          <input type="checkbox" id="atend-normal" onchange="toggleAtend(this)" style="width:16px;height:16px;accent-color:var(--accent)"> Suporte Tipo 1
         </label>
         <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-weight:400">
-          <input type="checkbox" id="atend-avancado" onchange="toggleAtend(this)" style="width:16px;height:16px;accent-color:var(--accent)"> Atendimento Avançado
+          <input type="checkbox" id="atend-avancado" onchange="toggleAtend(this)" style="width:16px;height:16px;accent-color:var(--accent)"> Suporte Tipo 2
         </label>
       </div>
       <div id="deslocacao-info" style="display:none;margin-top:8px;padding:8px 12px;background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius-sm);font-size:13px;color:var(--amber)">
@@ -1080,7 +1080,7 @@ async function saveInterv() {
   const tipo_atendimento = lv.avancado ? 'avancado' : 'normal';
   const horas = horasBase + (deslocacao ? 1 : 0);
   const localLabel = lv.presencial ? 'No local' : 'Acesso Remoto';
-  const atendLabel = lv.avancado ? 'Atendimento Avançado' : 'Atendimento Normal';
+  const atendLabel = lv.avancado ? 'Suporte Tipo 2' : 'Suporte Tipo 1';
   const deslocLabel = deslocacao ? ' + Deslocação (1h)' : '';
   const payload = {
     cliente_id, data, horas, tipo_local, deslocacao, tipo_atendimento,
@@ -1131,7 +1131,7 @@ function showDetail(id) {
     <div class="detail-grid">
       <div class="detail-item"><div class="detail-label">Cliente</div><div class="detail-value">${c?.nome || '—'}</div></div>
       <div class="detail-item"><div class="detail-label">Data</div><div class="detail-value" style="font-family:var(--mono)">${fmtDate(i.data)}</div></div>
-      <div class="detail-item"><div class="detail-label">Local</div><div class="detail-value">${i.local || '—'}</div></div>
+      <div class="detail-item"><div class="detail-label">Tipo de Atendimento</div><div class="detail-value">${i.local || '—'}</div></div>
       <div class="detail-item"><div class="detail-label">Horas utilizadas</div><div class="detail-value" style="color:var(--accent);font-family:var(--mono)">${fmtH(i.horas)}</div></div>
     </div>
     <div style="margin-bottom:12px">
