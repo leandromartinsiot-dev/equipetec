@@ -1380,6 +1380,49 @@ async function deleteUser(id) {
 document.querySelectorAll('.modal-overlay').forEach(o => {
   o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
 });
+
+function printDetail() {
+  const d = window._printData;
+  if (!d) return;
+  const i = d.i;
+  const c = d.c;
+  const horas = parseFloat(i.horas||0).toFixed(1).replace('.',',') + 'h';
+  const data = i.data ? i.data.split('-').reverse().join('/') : '';
+  const html = `<!DOCTYPE html><html lang="pt"><head><meta charset="UTF-8">
+  <title>Intervencao ${i.numero||''}</title>
+  <style>
+    body{font-family:Arial,sans-serif;padding:40px;color:#1a1916;font-size:14px}
+    .header{display:flex;justify-content:space-between;border-bottom:2px solid #c84b1e;padding-bottom:16px;margin-bottom:24px}
+    .logo{font-size:22px;font-weight:700}.logo span{color:#c84b1e}
+    .num{font-size:28px;font-weight:700;color:#c84b1e;font-family:monospace}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+    .box{background:#f5f4f0;border-radius:6px;padding:12px}
+    .lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#9b9890;margin-bottom:4px}
+    .val{font-size:14px;font-weight:500}
+    .sec{margin-bottom:16px}
+    .sec-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#9b9890;margin-bottom:8px}
+    .sec-body{background:#f5f4f0;border-radius:6px;padding:14px;line-height:1.6;min-height:60px}
+    .footer{margin-top:40px;border-top:1px solid #e2dfd8;padding-top:12px;font-size:11px;color:#9b9890;display:flex;justify-content:space-between}
+  </style></head><body>
+  <div class="header">
+    <div><div class="logo">Equipe<span>Tec</span></div><div style="font-size:12px;color:#9b9890">Servicos Informaticos</div></div>
+    <div style="text-align:right"><div style="font-size:10px;color:#9b9890;text-transform:uppercase">No Intervencao</div><div class="num">${i.numero||'--'}</div></div>
+  </div>
+  <div class="grid">
+    <div class="box"><div class="lbl">Cliente</div><div class="val">${c?c.nome:'--'}</div></div>
+    <div class="box"><div class="lbl">Data</div><div class="val">${data}</div></div>
+    <div class="box"><div class="lbl">Local</div><div class="val">${i.local||'--'}</div></div>
+    <div class="box"><div class="lbl">Horas utilizadas</div><div class="val" style="color:#c84b1e;font-size:18px;font-weight:700">${horas}</div></div>
+  </div>
+  <div class="sec"><div class="sec-title">Motivo / Solicitacao</div><div class="sec-body">${i.motivo||'--'}</div></div>
+  <div class="sec"><div class="sec-title">Relatorio do servico executado</div><div class="sec-body">${i.relatorio||'Sem relatorio registado.'}</div></div>
+  <div class="footer"><span>EquipeTec - Servicos Informaticos</span><span>Impresso em ${new Date().toLocaleDateString('pt-PT')}</span></div>
+  </body></html>`;
+  const w = window.open('','_blank','width=900,height=700');
+  w.document.write(html);
+  w.document.close();
+  w.onload = function(){ w.print(); };
+}
 </script>
 </body>
 </html>
