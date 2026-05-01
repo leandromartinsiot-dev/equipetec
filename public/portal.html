@@ -462,8 +462,32 @@
       </div>
     </div>
     <div class="field">
-      <label>Local da intervenção</label>
-      <input type="text" id="interv-local" placeholder="ex: Sede do cliente, remoto...">
+      <label>Local e tipo de atendimento *</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-weight:400">
+          <input type="checkbox" id="local-presencial" onchange="toggleLocal(this)" style="width:16px;height:16px;accent-color:var(--accent)"> No local
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-weight:400">
+          <input type="checkbox" id="local-deslocacao" onchange="toggleDeslocacao(this)" style="width:16px;height:16px;accent-color:var(--accent)" disabled> Deslocação
+        </label>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-weight:400">
+          <input type="checkbox" id="local-remoto" onchange="toggleLocal(this)" style="width:16px;height:16px;accent-color:var(--accent)"> Acesso Remoto
+        </label>
+        <div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-weight:400">
+          <input type="checkbox" id="atend-normal" onchange="toggleAtend(this)" style="width:16px;height:16px;accent-color:var(--accent)"> Atendimento Normal
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-weight:400">
+          <input type="checkbox" id="atend-avancado" onchange="toggleAtend(this)" style="width:16px;height:16px;accent-color:var(--accent)"> Atendimento Avançado
+        </label>
+      </div>
+      <div id="deslocacao-info" style="display:none;margin-top:8px;padding:8px 12px;background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius-sm);font-size:13px;color:var(--amber)">
+        ⚠ Deslocação seleccionada — será adicionada 1h às horas consumidas.
+      </div>
     </div>
     <div class="field">
       <label>Motivo / Solicitação *</label>
@@ -982,9 +1006,9 @@ function openIntervModal() {
     cache.clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
   document.getElementById('interv-data').value = new Date().toISOString().slice(0, 10);
   document.getElementById('interv-horas').value = '';
-  document.getElementById('interv-local').value = '';
   document.getElementById('interv-motivo').value = '';
   document.getElementById('interv-relatorio').value = '';
+  resetLocalFields();
   document.getElementById('hours-preview-wrap').style.display = 'none';
   document.getElementById('hours-warning').style.display = 'none';
   document.getElementById('modal-interv').classList.add('open');
@@ -1000,9 +1024,9 @@ function editIntervModal(id) {
     cache.clientes.map(c => `<option value="${c.id}" ${c.id === i.cliente_id ? 'selected' : ''}>${c.nome}</option>`).join('');
   document.getElementById('interv-data').value = i.data;
   document.getElementById('interv-horas').value = i.horas;
-  document.getElementById('interv-local').value = i.local || '';
   document.getElementById('interv-motivo').value = i.motivo || '';
   document.getElementById('interv-relatorio').value = i.relatorio || '';
+  setLocalValues(i.tipo_local||'remoto', i.deslocacao||false, i.tipo_atendimento||'normal');
   updateHoursPreview();
   document.getElementById('modal-interv').classList.add('open');
 }
@@ -1045,14 +1069,22 @@ function checkHoursWarning() {
 async function saveInterv() {
   const cliente_id = document.getElementById('interv-cliente').value;
   const data = document.getElementById('interv-data').value;
-  const horas = parseFloat(document.getElementById('interv-horas').value);
+  const horasBase = parseFloat(document.getElementById('interv-horas').value);
   const motivo = document.getElementById('interv-motivo').value.trim();
-  if (!cliente_id || !data || !horas || !motivo) {
-    alert('Preencha os campos obrigatórios (*)'); return;
-  }
+  const lv = getLocalValues();
+  if (!cliente_id || !data || !horasBase || !motivo) { alert('Preencha os campos obrigatórios (*)'); return; }
+  if (!lv.presencial && !lv.remoto) { alert('Seleccione o tipo de local (No local ou Acesso Remoto)'); return; }
+  if (!lv.normal && !lv.avancado) { alert('Seleccione o tipo de atendimento (Normal ou Avançado)'); return; }
+  const tipo_local = lv.presencial ? 'presencial' : 'remoto';
+  const deslocacao = lv.deslocacao;
+  const tipo_atendimento = lv.avancado ? 'avancado' : 'normal';
+  const horas = horasBase + (deslocacao ? 1 : 0);
+  const localLabel = lv.presencial ? 'No local' : 'Acesso Remoto';
+  const atendLabel = lv.avancado ? 'Atendimento Avançado' : 'Atendimento Normal';
+  const deslocLabel = deslocacao ? ' + Deslocação (1h)' : '';
   const payload = {
-    cliente_id, data, horas,
-    local: document.getElementById('interv-local').value.trim(),
+    cliente_id, data, horas, tipo_local, deslocacao, tipo_atendimento,
+    local: localLabel + deslocLabel + ' — ' + atendLabel,
     motivo,
     relatorio: document.getElementById('interv-relatorio').value.trim()
   };
@@ -1423,6 +1455,81 @@ function printDetail() {
   w.document.close();
   w.onload = function(){ w.print(); };
 }
+
+// ── CHECKBOXES LOCAL/ATENDIMENTO ─────────────────────────────
+function toggleLocal(el) {
+  const presencial = document.getElementById('local-presencial');
+  const remoto = document.getElementById('local-remoto');
+  const deslocacao = document.getElementById('local-deslocacao');
+  const deslocacaoInfo = document.getElementById('deslocacao-info');
+
+  if (el.id === 'local-presencial' && el.checked) {
+    remoto.checked = false;
+    deslocacao.disabled = false;
+    deslocacao.parentElement.style.opacity = '1';
+  } else if (el.id === 'local-remoto' && el.checked) {
+    presencial.checked = false;
+    deslocacao.checked = false;
+    deslocacao.disabled = true;
+    deslocacao.parentElement.style.opacity = '0.4';
+    deslocacaoInfo.style.display = 'none';
+  } else {
+    deslocacao.checked = false;
+    deslocacao.disabled = true;
+    deslocacao.parentElement.style.opacity = '0.4';
+    deslocacaoInfo.style.display = 'none';
+  }
+}
+
+function toggleDeslocacao(el) {
+  const info = document.getElementById('deslocacao-info');
+  info.style.display = el.checked ? 'block' : 'none';
+}
+
+function toggleAtend(el) {
+  const normal = document.getElementById('atend-normal');
+  const avancado = document.getElementById('atend-avancado');
+  if (el.id === 'atend-normal' && el.checked) avancado.checked = false;
+  else if (el.id === 'atend-avancado' && el.checked) normal.checked = false;
+}
+
+function resetLocalFields() {
+  ['local-presencial','local-remoto','local-deslocacao','atend-normal','atend-avancado'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.checked = false; el.disabled = id === 'local-deslocacao'; }
+  });
+  const desl = document.getElementById('local-deslocacao');
+  if (desl) desl.parentElement.style.opacity = '0.4';
+  const info = document.getElementById('deslocacao-info');
+  if (info) info.style.display = 'none';
+}
+
+function getLocalValues() {
+  const presencial = document.getElementById('local-presencial').checked;
+  const remoto = document.getElementById('local-remoto').checked;
+  const deslocacao = document.getElementById('local-deslocacao').checked;
+  const normal = document.getElementById('atend-normal').checked;
+  const avancado = document.getElementById('atend-avancado').checked;
+  return { presencial, remoto, deslocacao, normal, avancado };
+}
+
+function setLocalValues(tipo_local, deslocacao, tipo_atendimento) {
+  resetLocalFields();
+  if (tipo_local === 'presencial') {
+    document.getElementById('local-presencial').checked = true;
+    document.getElementById('local-deslocacao').disabled = false;
+    document.getElementById('local-deslocacao').parentElement.style.opacity = '1';
+    if (deslocacao) {
+      document.getElementById('local-deslocacao').checked = true;
+      document.getElementById('deslocacao-info').style.display = 'block';
+    }
+  } else if (tipo_local === 'remoto') {
+    document.getElementById('local-remoto').checked = true;
+  }
+  if (tipo_atendimento === 'normal') document.getElementById('atend-normal').checked = true;
+  else if (tipo_atendimento === 'avancado') document.getElementById('atend-avancado').checked = true;
+}
+
 </script>
 </body>
 </html>
