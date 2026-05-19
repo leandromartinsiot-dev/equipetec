@@ -1023,7 +1023,9 @@ function editIntervModal(id) {
     '<option value="">Selecione o cliente...</option>' +
     cache.clientes.map(c => `<option value="${c.id}" ${c.id === i.cliente_id ? 'selected' : ''}>${c.nome}</option>`).join('');
   document.getElementById('interv-data').value = i.data;
-  document.getElementById('interv-horas').value = i.horas;
+  // Mostrar horas base sem a deslocação para não duplicar ao guardar
+  const horasParaEditar = i.deslocacao ? (parseFloat(i.horas) - 1) : parseFloat(i.horas);
+  document.getElementById('interv-horas').value = horasParaEditar;
   document.getElementById('interv-motivo').value = i.motivo || '';
   document.getElementById('interv-relatorio').value = i.relatorio || '';
   setLocalValues(i.tipo_local||'remoto', i.deslocacao||false, i.tipo_atendimento||'normal');
@@ -1074,11 +1076,46 @@ async function saveInterv() {
   const lv = getLocalValues();
   if (!cliente_id || !data || !horasBase || !motivo) { alert('Preencha os campos obrigatórios (*)'); return; }
   if (!lv.presencial && !lv.remoto) { alert('Seleccione o tipo de local (No local ou Acesso Remoto)'); return; }
-  if (!lv.normal && !lv.avancado) { alert('Seleccione o tipo de atendimento (Normal ou Avançado)'); return; }
+  if (!lv.normal && !lv.avancado) { alert('Seleccione o tipo de atendimento (Suporte Tipo 1 ou Tipo 2)'); return; }
   const tipo_local = lv.presencial ? 'presencial' : 'remoto';
   const deslocacao = lv.deslocacao;
   const tipo_atendimento = lv.avancado ? 'avancado' : 'normal';
-  const horas = horasBase + (deslocacao ? 1 : 0);
+
+  // Se é edição — calcular horas correctamente sem duplicar deslocação
+  let horas;
+  if (editingInterv) {
+    const old = cache.intervencoes.find(i => i.id === editingInterv);
+    const oldDeslocacao = old ? (old.deslocacao || false) : false;
+    const oldHorasBase = old ? (parseFloat(old.horas) - (oldDeslocacao ? 1 : 0)) : horasBase;
+    // Se mudou as horas base ou a deslocação, recalcular
+    horas = horasBase + (deslocacao ? 1 : 0);
+    // Se o utilizador não alterou as horas e a deslocação já estava marcada, usar horasBase como está
+    if (Math.abs(horasBase - oldHorasBase) < 0.01 && deslocacao === oldDeslocacao) {
+      horas = parseFloat(old.horas);
+    }
+  } else {
+    horas = horasBase + (deslocacao ? 1 : 0);
+  }
+
+  // Confirmação antes de guardar edição
+  if (editingInterv) {
+    const confirmado = await new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center';
+      overlay.innerHTML = \`<div style="background:white;border-radius:14px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,0.2)">
+        <div style="font-size:17px;font-weight:600;margin-bottom:10px">Confirmar alteração</div>
+        <div style="font-size:14px;color:#6b6860;margin-bottom:24px">Tem a certeza que deseja guardar as alterações nesta intervenção?</div>
+        <div style="display:flex;justify-content:flex-end;gap:10px">
+          <button id="confirm-no" style="padding:10px 20px;border:1px solid #ccc;border-radius:6px;background:white;font-size:14px;cursor:pointer">Não</button>
+          <button id="confirm-yes" style="padding:10px 20px;border:none;border-radius:6px;background:#c84b1e;color:white;font-size:14px;cursor:pointer;font-weight:500">Sim, guardar</button>
+        </div>
+      </div>\`;
+      document.body.appendChild(overlay);
+      document.getElementById('confirm-yes').onclick = () => { document.body.removeChild(overlay); resolve(true); };
+      document.getElementById('confirm-no').onclick = () => { document.body.removeChild(overlay); resolve(false); };
+    });
+    if (!confirmado) return;
+  }
   const localLabel = lv.presencial ? 'No local' : 'Acesso Remoto';
   const atendLabel = lv.avancado ? 'Suporte Tipo 2' : 'Suporte Tipo 1';
   const deslocLabel = deslocacao ? ' + Deslocação (1h)' : '';
