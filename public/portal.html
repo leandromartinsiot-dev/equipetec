@@ -1102,14 +1102,13 @@ async function saveInterv() {
     const confirmado = await new Promise(resolve => {
       const overlay = document.createElement('div');
       overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center';
-      overlay.innerHTML = \`<div style="background:white;border-radius:14px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,0.2)">
-        <div style="font-size:17px;font-weight:600;margin-bottom:10px">Confirmar alteração</div>
-        <div style="font-size:14px;color:#6b6860;margin-bottom:24px">Tem a certeza que deseja guardar as alterações nesta intervenção?</div>
-        <div style="display:flex;justify-content:flex-end;gap:10px">
-          <button id="confirm-no" style="padding:10px 20px;border:1px solid #ccc;border-radius:6px;background:white;font-size:14px;cursor:pointer">Não</button>
-          <button id="confirm-yes" style="padding:10px 20px;border:none;border-radius:6px;background:#c84b1e;color:white;font-size:14px;cursor:pointer;font-weight:500">Sim, guardar</button>
-        </div>
-      </div>\`;
+      overlay.innerHTML = '<div style="background:white;border-radius:14px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,0.2)">'
+        + '<div style="font-size:17px;font-weight:600;margin-bottom:10px">Confirmar alteração</div>'
+        + '<div style="font-size:14px;color:#6b6860;margin-bottom:24px">Tem a certeza que deseja guardar as alterações nesta intervenção?</div>'
+        + '<div style="display:flex;justify-content:flex-end;gap:10px">'
+        + '<button id="confirm-no" style="padding:10px 20px;border:1px solid #ccc;border-radius:6px;background:white;font-size:14px;cursor:pointer">Não</button>'
+        + '<button id="confirm-yes" style="padding:10px 20px;border:none;border-radius:6px;background:#c84b1e;color:white;font-size:14px;cursor:pointer;font-weight:500">Sim, guardar</button>'
+        + '</div></div>';
       document.body.appendChild(overlay);
       document.getElementById('confirm-yes').onclick = () => { document.body.removeChild(overlay); resolve(true); };
       document.getElementById('confirm-no').onclick = () => { document.body.removeChild(overlay); resolve(false); };
